@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<style>
+    #editor {
+        position: absolute;
+        width: 500px;
+        height: 400px;
+    }
+</style>
+<div id="editor"></div>
+<script src="../ace-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="../ace-min/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+<script src="../shared-editor/editor.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setOptions({
+        autoScrollEditorIntoView: true,
+        copyWithEmptySelection: true,
+    });
+    // use setOptions method
+    editor.setOption("mergeUndoDeltas", "always");
+    var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
+    editor.session.setMode(new JavaScriptMode());
+    sharedEditor.listenEditor(editor, "olympo.ge:4200");
+</script>
+</body>
+</html>
