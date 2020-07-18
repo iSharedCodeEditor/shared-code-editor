@@ -20,8 +20,13 @@ const sharedEditor = {
         });
 
         editor.session.on('change', function (delta) {
-            socket.send(JSON.stringify(delta));
-            console.log(delta.start, delta.end, delta.lines, delta.action);
+            if (editor.curOp && editor.curOp.command.name){
+                //console.log("user change");
+                socket.send(JSON.stringify(delta));
+                console.log(delta.start, delta.end, delta.lines, delta.action);
+            } else {
+                //console.log("other change")
+            }
         });
     }
 };
