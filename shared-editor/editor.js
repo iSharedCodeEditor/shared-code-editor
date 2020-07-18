@@ -1,6 +1,10 @@
-exports.listenEditor = function(editor){
+
+exports.listenEditor = function(editor, endpoint){
+
+    var socket = io();
+
     editor.session.on('change', function(delta) {
-        console.log( delta.start, delta.end, delta.lines, delta.action);
+        console.log(delta.start, delta.end, delta.lines, delta.action);
     });
 };
 
