@@ -1,7 +1,24 @@
 
 exports.listenEditor = function(editor, endpoint){
 
-    const socket = new WebSocket('ws://${endpoint}');
+    const socket = new WebSocket(`ws://${endpoint}`);
+
+    socket.onopen(() => {
+        socket.send('Hello!');
+    });
+
+    socket.onmessage(data => {
+        if(data.action === 'insert'){
+            if(data.start.row !== data.end.row){
+                editor.insert(data.start, '\n')
+            } else {
+                editor.insert(data.start, data.lines[0])
+            }
+        } else if (data.action === 'remove'){
+            editor.session.replace(new ace.Range(data.start.row, data.start.column, data.end.row, data.end.column), "");
+        }
+        console.log(data);
+    });
 
     editor.session.on('change', function(delta) {
         socket.onopen(() => {
