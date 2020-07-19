@@ -2,8 +2,58 @@ const sharedEditor = {
     debug: false,
     onServerEvent(evt) {},
     onUserEvent(evt) {},
+    dragAndDropEnabled: true,
     listenEditor: function (editor, endpoint) {
 
+        if (sharedEditor.dragAndDropEnabled) {
+            editor.container.addEventListener('drop', (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+                const files = evt.dataTransfer.files;
+                if (files.length > 0) {
+                    files[0].text().then(
+                        text => {
+                            var remove = {
+                                start: {
+                                    row: 0,
+                                    col: 0
+                                },
+                                end: {
+                                    row: 9999999,
+                                    col: 999999
+                                },
+                                action: "remove",
+                                lines: []
+                            };
+                            var insertFile = {
+                                start: {
+                                    row: 0,
+                                    col: 0
+                                },
+                                end: {
+                                    row: 9999999,
+                                    col: 999999
+                                },
+                                action: "insert",
+                                lines: [text]
+                            };
+                            socket.send(JSON.stringify(remove));
+                            sharedEditor.applyChange(remove);
+                            socket.send(JSON.stringify(insertFile));
+                            sharedEditor.applyChange(insertFile);
+                        }
+                    );
+                }
+            });
+            editor.container.addEventListener('dragover', (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+            });
+            editor.container.addEventListener('dragleave', (evt) => {
+                evt.preventDefault();
+                evt.stopPropagation();
+            });
+        }
         const socket = new WebSocket(`ws://${endpoint}`);
 
         socket.addEventListener('message', function (msg) {
