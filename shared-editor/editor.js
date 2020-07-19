@@ -10,10 +10,10 @@ const sharedEditor = {
 
         socket.addEventListener('message', function (msg) {
             const data = JSON.parse(msg.data);
-            if(this.debug){
+            if(sharedEditor.debug){
                 console.log("data received: "+ data);
             }
-            if (data.userFingerPrint === this.userFingerPrint){
+            if (data.userFingerPrint === sharedEditor.userFingerPrint){
 
             }
             eventManager.enqueueEvent(data);
@@ -21,17 +21,18 @@ const sharedEditor = {
 
         editor.session.on('change', function (delta) {
             if (editor.curOp && editor.curOp.command.name){
-                this.count++;
-                delta.userFingerprint = this.userFingerPrint;
+                sharedEditor.count++;
+                delta.userFingerprint = sharedEditor.userFingerPrint;
                 delta.timestamp = new Date()
-                delta.count = this.count;
-                if (this.debug){
+                delta.count = sharedEditor.count;
+                console.log(sharedEditor.debug);
+                if (sharedEditor.debug){
                     console.log("change by current user", delta);
                     console.log(delta.start, delta.end, delta.lines, delta.action);
                 }
                 socket.send(JSON.stringify(delta));
             } else {
-                if (this.debug){
+                if (sharedEditor.debug){
                     console.log("change by other user", delta);
                 }
             }
@@ -45,10 +46,10 @@ const eventManager = {
     historyQueue: [], //queue for storing history, for operational transformation.
     startListeningQueue(){
         setInterval(()=>{
-            while(this.newEventQueue.length > 0){
-                var data = this.newEventQueue.shift();
-                if (data.timestamp > this.historyQueue[this.historyQueue.length-1]){
-                    this.applyChange(data);
+            while(eventManager.newEventQueue.length > 0){
+                var data = eventManager.newEventQueue.shift();
+                if (data.timestamp > eventManager.historyQueue[eventManager.historyQueue.length-1]){
+                    eventManager.applyChange(data);
                 }
             }
         },10);
@@ -65,7 +66,7 @@ const eventManager = {
         }
     },
     enqueueEvent(data){
-        this.newEventQueue.push(data);
+        eventManager.newEventQueue.push(data);
     }
 };
 
