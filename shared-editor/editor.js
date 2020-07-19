@@ -1,31 +1,39 @@
 const sharedEditor = {
+    debug:false,
+    userFingerPrint: new Date().getTime(),
+    count:0,
     listenEditor: function (editor, endpoint) {
 
+        eventManager.editor = editor;
+        eventManager.startListeningQueue();
         const socket = new WebSocket(`ws://${endpoint}`);
 
         socket.addEventListener('message', function (msg) {
-            console.log("data is ");
-            console.log(msg);
             const data = JSON.parse(msg.data);
-            console.log(data);
-            if (data.action === 'insert') {
-                if (data.start.row !== data.end.row) {
-                    editor.session.insert(data.start, '\n')
-                } else {
-                    editor.session.insert(data.start, data.lines[0])
-                }
-            } else if (data.action === 'remove') {
-                editor.session.replace(new ace.Range(data.start.row, data.start.column, data.end.row, data.end.column), "");
+            if(this.debug){
+                console.log("data received: "+ data);
             }
+            if (data.userFingerPrint === this.userFingerPrint){
+
+            }
+            eventManager.enqueueEvent(data);
         });
 
         editor.session.on('change', function (delta) {
             if (editor.curOp && editor.curOp.command.name){
-                //console.log("user change");
+                this.count++;
+                delta.userFingerprint = this.userFingerPrint;
+                delta.timestamp = new Date()
+                delta.count = this.count;
+                if (this.debug){
+                    console.log("change by current user", delta);
+                    console.log(delta.start, delta.end, delta.lines, delta.action);
+                }
                 socket.send(JSON.stringify(delta));
-                console.log(delta.start, delta.end, delta.lines, delta.action);
             } else {
-                //console.log("other change")
+                if (this.debug){
+                    console.log("change by other user", delta);
+                }
             }
         });
     }
