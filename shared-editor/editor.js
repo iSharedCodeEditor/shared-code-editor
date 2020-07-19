@@ -1,7 +1,7 @@
 const sharedEditor = {
-    debug:false,
-    onServerEvent(evt){},
-    onUserEvent(evt){},
+    debug: false,
+    onServerEvent(evt) {},
+    onUserEvent(evt) {},
     listenEditor: function (editor, endpoint) {
 
         const socket = new WebSocket(`ws://${endpoint}`);
@@ -9,12 +9,12 @@ const sharedEditor = {
         socket.addEventListener('message', function (msg) {
             sharedEditor.onServerEvent("server");
             const data = JSON.parse(msg.data);
-            if(sharedEditor.debug){
-                console.log("data received: "+ data);
+            if (sharedEditor.debug) {
+                console.log("data received: " + data);
             }
-            if(data.hasOwnProperty('getText')){
+            if (data.hasOwnProperty('getText')) {
                 socket.send(JSON.stringify({
-                    getText:editor.getValue()
+                    getText: editor.getValue()
                 }))
             } else {
                 sharedEditor.applyChange(data);
@@ -22,21 +22,21 @@ const sharedEditor = {
         });
 
         editor.session.on('change', function (delta) {
-            if (editor.curOp && editor.curOp.command.name){
-                if (sharedEditor.debug){
+            if (editor.curOp && editor.curOp.command.name) {
+                if (sharedEditor.debug) {
                     sharedEditor.onUserEvent("user event");
                     console.log("change by current user", delta);
                     console.log(delta.start, delta.end, delta.lines, delta.action);
                 }
                 socket.send(JSON.stringify(delta));
             } else {
-                if (sharedEditor.debug){
+                if (sharedEditor.debug) {
                     console.log("change by other user", delta);
                 }
             }
         });
     },
-    applyChange(data){
+    applyChange(data) {
         if (data.action === 'insert') {
             let dataStr = "";
             var i;
