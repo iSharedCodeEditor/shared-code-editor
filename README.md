@@ -41,6 +41,16 @@ socket.send(JSON.stringify({
     getText: "Hello World"
 }))
 ```
+editor events are following type:
+```javascript
+editorEvent = {
+    start:{row:0, col:0},
+    end:{row:0, col:0},
+    action:"insert",
+    lines: ["Hello world"]
+}
+```
+action is either insert or remove and lines is array of all changed lines.
 ### Demo
 Also you can see our [demo](https://github.com/iSharedCodeEditor/shared-code-editor/tree/master/demo) server written on node.js
 
