@@ -1,10 +1,13 @@
 const sharedEditor = {
     debug:false,
+    onServerEvent(evt){},
+    onUserEvent(evt){},
     listenEditor: function (editor, endpoint) {
 
         const socket = new WebSocket(`ws://${endpoint}`);
 
         socket.addEventListener('message', function (msg) {
+            sharedEditor.onServerEvent("server");
             const data = JSON.parse(msg.data);
             if(sharedEditor.debug){
                 console.log("data received: "+ data);
@@ -21,6 +24,7 @@ const sharedEditor = {
         editor.session.on('change', function (delta) {
             if (editor.curOp && editor.curOp.command.name){
                 if (sharedEditor.debug){
+                    sharedEditor.onUserEvent("user event");
                     console.log("change by current user", delta);
                     console.log(delta.start, delta.end, delta.lines, delta.action);
                 }

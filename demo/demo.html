@@ -29,6 +29,12 @@
     editor.session.setMode(new JavaScriptMode());
     sharedEditor.listenEditor(editor, "olympo.ge:4200");
     sharedEditor.debug = true;
+    sharedEditor.onServerEvent = (str) => {
+        console.log(str);
+    };
+    sharedEditor.onUserEvent = (str) => {
+        console.log(str);
+    };
 </script>
 </body>
 </html>
