@@ -28,10 +28,10 @@ const sharedEditor = {
     },
     applyChange(data){
         if (data.action === 'insert') {
-            let dataStr = ""
-            for (let i in 0..data.lines.size) {
-                dataStr += data.lines[0]
-                dataStr += '\n'
+            let dataStr = "";
+            var i;
+            for (i = 0; i < data.lines.length; i++) {
+                dataStr += data.lines[i] + '\n';
             }
             editor.session.insert(data.start, dataStr)
         } else if (data.action === 'remove') {
