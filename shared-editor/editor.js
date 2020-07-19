@@ -28,11 +28,12 @@ const sharedEditor = {
     },
     applyChange(data){
         if (data.action === 'insert') {
-            if (data.start.row !== data.end.row) {
-                editor.session.insert(data.start, '\n')
-            } else {
-                editor.session.insert(data.start, data.lines[0])
+            let dataStr = ""
+            for (let i in 0..data.lines.size) {
+                dataStr += data.lines[0]
+                dataStr += '\n'
             }
+            editor.session.insert(data.start, dataStr)
         } else if (data.action === 'remove') {
             editor.session.replace(new ace.Range(data.start.row, data.start.column, data.end.row, data.end.column), "");
         }
