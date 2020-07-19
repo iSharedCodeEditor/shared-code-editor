@@ -7,7 +7,7 @@ First you need to add ace cdn to html :
 ```
 For more information you can refer to [ace git](https://github.com/ajaxorg/ace).
 You can use ace from our library in shared-editor/lib/ace-min/ folder.
-To use our library you need to download / clone this repository and add script in project.
+To use our library you need to download / clone this repository's shared-editor folder and add script in project.
 ```html
 <script src="shared-editor/editor.js" type="text/javascript" charset="utf-8"></script>
 ```
