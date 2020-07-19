@@ -47,5 +47,7 @@ Also you can see our [demo](https://github.com/iSharedCodeEditor/shared-code-edi
 ### Contribution
 For contribution please visit  [contribution.md](https://github.com/iSharedCodeEditor/shared-code-editor/tree/master/demo)
 
+### License
+This project is licensed under the terms of the [MIT license](https://github.com/iSharedCodeEditor/shared-code-editor/blob/master/LICENSE).
 
 
