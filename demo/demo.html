@@ -27,7 +27,7 @@
     editor.setOption("mergeUndoDeltas", "always");
     var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
     editor.session.setMode(new JavaScriptMode());
-    sharedEditor.listenEditor(editor, "olympo.ge:4200");
+    sharedEditor.listenEditor(editor, "localhost:4200");
     sharedEditor.debug = true;
     sharedEditor.onServerEvent = (str) => {
         console.log(str);
