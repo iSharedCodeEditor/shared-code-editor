@@ -93,8 +93,8 @@ const sharedEditor = {
             for (i = 0; i < data.lines.length; i++) {
                 dataStr += data.lines[i] + '\n';
             }
-            editor.session.insert(data.start, dataStr);
             dataStr = dataStr.substr(0, dataStr.length - 1);
+            editor.session.insert(data.start, dataStr);
         } else if (data.action === 'remove') {
             editor.session.replace(new ace.Range(data.start.row, data.start.column, data.end.row, data.end.column), "");
         }
